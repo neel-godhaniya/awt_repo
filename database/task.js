@@ -1,15 +1,17 @@
     const express = require("express");
     const app = express();
+    const fs = require("fs");
 
     app.use(express.urlencoded({ extended: true }));
 
-    let pendingTasks = [
-        "Complete AI Lab",
-        "Study DBMS Joins",
-        "Prepare Hotel Project PPT"
-    ];
+    function load() {
+    const raw = fs.readFileSync("data.json");
+    return JSON.parse(raw);
+}
 
-    let completedTasks = [];
+function save(data) {
+    fs.writeFileSync("data.json", JSON.stringify(data, null, 2));
+}
 
     app.get("/", (req, res) => {
 
