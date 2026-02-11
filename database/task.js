@@ -15,6 +15,10 @@ function save(data) {
 
     app.get("/", (req, res) => {
 
+        const data = load();
+        const pendingTasks = data.pendingTasks;
+        const completedTasks = data.completedTasks;
+
         let pendingHTML = "";
         pendingTasks.forEach((task, index) => {
             pendingHTML += `
@@ -102,27 +106,32 @@ function save(data) {
     });
 
     app.post("/add", (req, res) => {
-        const newTask = req.body.task;
-        pendingTasks.push(newTask);
+         const data = load();
+         data.pendingTasks.push(req.body.task);
+        save(data);
         res.redirect("/");
     });
 
     app.post("/complete", (req, res) => {
-        const index = req.body.index;
-        const finishedTask = pendingTasks.splice(index, 1);
-        completedTasks.push(finishedTask[0]);
+      const data = load();
+      const index = req.body.index;
+      const finishedTask = data.pendingTasks.splice(index, 1);
+      data.completedTasks.push(finishedTask[0]);
+      save(data);
         res.redirect("/");
     });
 
     app.post("/deletePending", (req, res) => {
-        const index = req.body.index;
-        pendingTasks.splice(index, 1);
+        const data = load();
+        data.pendingTasks.splice(req.body.index, 1);
+        save(data);
         res.redirect("/");
     });
 
     app.post("/deleteCompleted", (req, res) => {
-        const index = req.body.index;
-        completedTasks.splice(index, 1);
+        const data = load();
+        data.completedTasks.splice(req.body.index, 1);
+        save(data);
         res.redirect("/");
     });
 
