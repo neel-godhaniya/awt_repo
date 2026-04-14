@@ -11,7 +11,7 @@
 
 function save(data) {
     fs.writeFileSync("data.json", JSON.stringify(data, null, 2));
-}
+}g
 
     app.get("/", (req, res) => {
 
